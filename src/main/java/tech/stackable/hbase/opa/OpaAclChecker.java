@@ -12,6 +12,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -80,11 +83,31 @@ public class OpaAclChecker {
     }
   }
 
-  public void checkPermissionInfo(User user, TableName table, Permission.Action action)
+  public void checkPermissionInfoWithOp(
+      User user, TableName table, Permission.Action action, OpType operation)
+      throws AccessControlException {
+    checkPermissionInfoWithOp(user, table, action, operation, Collections.emptyMap());
+  }
+
+  public void checkPermissionInfoWithOp(
+      User user,
+      TableName table,
+      Permission.Action action,
+      OpType operation,
+      Map<String, List<String>> families)
       throws AccessControlException {
     OpaAllowQuery query =
-        new OpaAllowQuery(new OpaAllowQuery.OpaAllowQueryInput(user.getUGI(), table, action));
+        new OpaAllowQuery(
+            new OpaAllowQuery.OpaAllowQueryInput(
+                user.getUGI(), table, action, operation, families));
     this.checkPermissionInfo(query);
+  }
+
+  public void checkPermissionInfo(User user, TableName table, Permission.Action... actions)
+      throws AccessControlException {
+    for (Permission.Action action : actions) {
+      checkPermissionInfoWithOp(user, table, action, OpType.NONE);
+    }
   }
 
   public void checkPermissionInfo(User user, String namespace, Permission.Action action)
