@@ -29,7 +29,7 @@ The following configuration options are expected in `hbase-site.xml`:
 
 The Stackable HBase operator configures these options automatically.
 
-### API
+### Request/Response Format
 
 For every action a request similar to the one below is sent to OPA. The important parts of this request are:
 
@@ -77,7 +77,7 @@ or
 {"result":false}
 ```
 
-### API
+### Covered Actions
 
 The following actions are subject to ACL checks:
 
