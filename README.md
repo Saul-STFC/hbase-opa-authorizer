@@ -96,4 +96,3 @@ The following actions are currently excluded but will be included in future rele
 - moving, assigning and unassigning tables
 - snapshot operations (create, list, clone, restore, delete)
 - bulk loading of HFiles
-
